@@ -83,6 +83,7 @@ public class InAppBrowser extends CordovaPlugin {
     private static final String CLEAR_ALL_CACHE = "clearcache";
     private static final String CLEAR_SESSION_CACHE = "clearsessioncache";
     private static final String HARDWARE_BACK_BUTTON = "hardwareback";
+    private static final String FULLSCREEN_WINDOW = "fullscreen";
 
     private InAppBrowserDialog dialog;
     private WebView inAppWebView;
@@ -91,6 +92,7 @@ public class InAppBrowser extends CordovaPlugin {
     private boolean showLocationBar = true;
     private boolean showZoomControls = true;
     private boolean openWindowHidden = false;
+    private boolean fullscreenWindow = false;
     private boolean clearAllCache = false;
     private boolean clearSessionCache = false;
     private boolean hadwareBackButton = true;
@@ -470,6 +472,7 @@ public class InAppBrowser extends CordovaPlugin {
         showLocationBar = true;
         showZoomControls = true;
         openWindowHidden = false;
+        fullscreenWindow = false;
         if (features != null) {
             Boolean show = features.get(LOCATION);
             if (show != null) {
@@ -495,6 +498,10 @@ public class InAppBrowser extends CordovaPlugin {
                 if (cache != null) {
                     clearSessionCache = cache.booleanValue();
                 }
+            }
+            Boolean fullscreen = features.get(FULLSCREEN_WINDOW);
+            if (fullscreen != null) {
+                fullscreenWindow = fullscreen.booleanValue();
             }
         }
 
@@ -707,6 +714,10 @@ public class InAppBrowser extends CordovaPlugin {
                 // Show() needs to be called to cause the URL to be loaded
                 if(openWindowHidden) {
                     dialog.hide();
+                }
+
+                if (fullscreenWindow) {
+                    dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
                 }
             }
         };
